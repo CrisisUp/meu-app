@@ -17,14 +17,14 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
                 </div>
-                <span class="text-xl font-bold tracking-tight text-slate-800">UserAdmin</span>
+                <span class="text-xl font-bold tracking-tight text-slate-800">Gestão CDI</span>
             </div>
 
             <nav class="flex items-center space-x-4">
                 @if (Route::has('login'))
                     @auth
-                        <a href="{{ url('/index-user') }}" class="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">Gerenciar Usuários</a>
-                        <a href="{{ url('/dashboard') }}" class="btn-primary">Acessar Painel</a>
+                        <a href="{{ route('user.index') }}" class="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">Equipe / Funcionários</a>
+                        <a href="{{ route('home') }}" class="btn-primary">Acessar Painel</a>
                     @else
                         <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">Entrar</a>
                         @if (Route::has('register'))
@@ -41,20 +41,30 @@
                 
                 <!-- Tag Sóbria -->
                 <div class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-8">
-                    Versão 1.0 — Gestão Simplificada
+                    Versão 1.0 — Gestão CDI
                 </div>
 
                 <!-- Título Hero -->
                 <h1 class="text-5xl md:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight">
-                    Controle total sobre seu <span class="text-emerald-700">diretório de usuários.</span>
+                    O cuidado que seus idosos merecem, com a <span class="text-emerald-700">gestão que você precisa.</span>
                 </h1>
                 
                 <p class="text-lg text-slate-500 max-w-2xl mx-auto mb-12 leading-relaxed">
-                    Uma interface limpa, rápida e intuitiva para gerenciar cadastros, permissões e perfis de forma profissional e segura.
+                    Sistema completo para o gerenciamento de Centros de Dia: cadastros de idosos, controle de frequências, atividades e equipe profissional.
                 </p>
 
                 <!-- Cards de Estatísticas Rápidas -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
+                        <div class="h-10 w-10 bg-emerald-100 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </div>
+                        <div class="text-2xl font-bold text-slate-900">{{ $totalIdosos }}</div>
+                        <div class="text-sm text-slate-400 font-medium">Idosos Atendidos</div>
+                    </div>
+
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
                         <div class="h-10 w-10 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
                             <svg class="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -62,7 +72,7 @@
                             </svg>
                         </div>
                         <div class="text-2xl font-bold text-slate-900">{{ $totalUsers }}</div>
-                        <div class="text-sm text-slate-400 font-medium">Usuários Cadastrados</div>
+                        <div class="text-sm text-slate-400 font-medium">Equipe Profissional</div>
                     </div>
 
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow">

@@ -1,100 +1,104 @@
-# Meu App - Laravel Project
+# Gestão CDI - Centro de Dia para Idosos 🏥👴👵
 
-Este é um projeto desenvolvido com o framework [Laravel](https://laravel.com).
-
-## Pré-requisitos
-
-Antes de começar, verifique se você tem as seguintes ferramentas instaladas em sua máquina:
-
-- [PHP](https://www.php.net/downloads.php) (Versão >= 8.2 recomendada)
-- [Composer](https://getcomposer.org/)
-- [Node.js & NPM](https://nodejs.org/)
-- Um banco de dados (SQLite, MySQL, PostgreSQL, etc.)
+Este é um sistema web profissional desenvolvido com o ecossistema **Laravel** e **Tailwind CSS v4**, especializado no gerenciamento completo de Centros de Dia para Idosos (CDI). O sistema foca em acessibilidade, segurança de dados e eficiência operacional para equipes de assistência social e saúde.
 
 ---
 
-## Como Iniciar o Projeto Localmente
+## 🚀 Funcionalidades Principais
 
-Siga os passos abaixo para configurar o ambiente de desenvolvimento:
+### 📋 Módulo de Idosos (Beneficiários)
 
-### 1. Clonar o Repositório
+* **Cadastro Visual:** Registro de dados pessoais com suporte a **Upload de Foto** para identificação rápida.
+* **Identificação Oficial:** Suporte obrigatório a **NIS** e CPF, com máscaras de entrada dinâmicas.
+* **Registro Único:** Geração automática de código de identificação único (Ex: `CDI-2026-0001`).
+* **Prontuário Individual:** Ficha técnica detalhada com dados de saúde (alergias, medicamentos) e contatos de emergência.
+* **Auditoria de Intercorrências:** Timeline de ocorrências com registro automático de qual profissional fez a anotação.
 
-```bash
-git clone <url-do-repositorio>
-cd meu-app
-```
+### 📅 Agenda de Atividades e Oficinas
 
-### 2. Instalar Dependências PHP
+* **Cronograma Semanal:** Gestão de oficinas (Fisioterapia, Música, Artesanato, etc) com definição de facilitador, dia e horário.
+* **Gestão de Participantes:** Vínculo individual de idosos a atividades específicas para controle de engajamento.
 
-```bash
-composer install
-```
+### ✅ Controle de Frequência e Ponto
 
-### 3. Instalar Dependências JavaScript
+* **Chamada Diária:** Tabela inteligente para registro de presença/ausência em lote com anotações de intercorrência.
+* **Ponto da Equipe:** Registro de entrada e saída dos funcionários diretamente no Dashboard, com contador de "Equipe no Posto" em tempo real.
 
-```bash
-npm install
-```
+### 🚑 Módulo de Encaminhamentos (Referência)
 
-### 4. Configurar o Ambiente
+* **Fluxo de Saída:** Registro de idosos encaminhados para hospitais, UPAs, CRAS ou especialistas.
+* **Classificação de Risco:** Níveis de prioridade (Urgente, Programado, Rotina) com histórico consolidado no prontuário.
 
-Copie o arquivo de exemplo de ambiente e gere a chave da aplicação:
+### 📄 Documentação e Relatórios
 
-```bash
-cp .env.example .env
-php artisan key:generate
-```
-
-### 5. Configurar o Banco de Dados
-
-No arquivo `.env`, configure os dados de acesso ao seu banco de dados. Caso deseje utilizar **SQLite** (padrão em novos projetos Laravel):
-
-1. Crie o arquivo do banco de dados:
-
-   ```bash
-   touch database/database.sqlite
-   ```
-
-2. No seu `.env`, certifique-se de que a conexão está como:
-   `DB_CONNECTION=sqlite`
-
-3. Execute as migrações para criar as tabelas:
-
-   ```bash
-   php artisan migrate
-   ```
-
-### 6. Executar a Aplicação
-
-Você precisará rodar dois comandos (em terminais separados ou em background):
-
-- **Servidor de Desenvolvimento (PHP):**
-
-  ```bash
-  php artisan serve
-  ```
-
-  Acesse em: [http://127.0.0.1:8000](http://127.0.0.1:8000)
-
-- **Compilação de Assets (Vite):**
-
-  ```bash
-  npm run dev
-  ```
+* **Relatórios em PDF:** Geração de relatórios mensais de frequência formatados, com visualização prévia e escolha de período.
+* **Exportação CSV:** Extração de dados da lista de idosos para Excel seguindo os filtros ativos.
+* **Print-Friendly:** Layout do prontuário otimizado para impressão direta (`Ctrl+P`).
 
 ---
 
-## Dicas Adicionais
+## 🎨 Design e UX (Padrão Enterprise)
 
-### Laravel Herd (macOS)
+* **Acessibilidade:** Tipografia de alto contraste e peso visual (Slate & Emerald).
+* **Níveis de Acesso:** Diferenciação entre perfis `Administrador` e `Funcionário` para gestão da equipe profissional.
+* **Navegação:** Breadcrumbs em todas as seções e filtros avançados na listagem.
 
-Como este projeto está dentro do diretório `Herd`, se você tiver o [Laravel Herd](https://herd.laravel.com) instalado, basta acessar:
-`http://meu-app.test` no seu navegador.
+---
 
-### Comandos Úteis
+## 🛣️ Estrutura de Endpoints (Rotas)
 
-- `php artisan tinker`: Console interativo para testar o código PHP.
+O sistema está organizado em módulos lógicos protegidos por autenticação:
 
-- `php artisan route:list`: Lista todas as rotas registradas.
+### 👴 Gestão de Idosos
 
-- `php artisan make:controller NomeController`: Cria um novo controlador.
+* `GET /idosos` : Listagem com filtros e miniaturas de fotos.
+* `GET /idosos/{id}` : Prontuário eletrônico e timeline de saúde.
+* `GET /idosos/exportar-csv` : BI e relatórios administrativos.
+
+### 🗓️ Atividades e Oficinas
+
+* `GET /atividades` : Cronograma geral de oficinas.
+* `GET /atividades/{id}` : Gestão de participantes e detalhes da oficina.
+
+### 📅 Operacional e Ponto
+
+* `GET /frequencia` : Interface de chamada diária em lote.
+* `POST /ponto/entrada` | `POST /ponto/saida` : Controle de jornada da equipe.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+* **Backend:** Laravel 12 (PHP 8.4+)
+* **Frontend:** Blade Templates & Alpine.js
+* **Estilização:** Tailwind CSS v4
+* **PDF:**Barryvdh Laravel-DomPDF
+* **Storage:** Local Symlink (Imagens dos beneficiários)
+
+---
+
+## 💻 Como Iniciar o Projeto Localmente
+
+1. **Clonar e Instalar:**
+
+   ```bash
+   git clone <url-do-repositorio>
+   composer install && npm install
+   ```
+
+2. **Ambiente e Banco:**
+
+   ```bash
+   cp .env.example .env && php artisan key:generate
+   touch database/database.sqlite && php artisan migrate
+   php artisan storage:link
+   ```
+
+3. **Comandos Úteis:**
+   * **Geração de Códigos Antigos:** `php artisan cdi:gerar-codigos`
+   * **Promover Administrador:** `php artisan cdi:promote-admin {email}`
+   * **Rodar o Servidor:** `php artisan serve` & `npm run dev`
+
+---
+
+&copy; 2026 — Gestão CDI. Sistema profissional para o cuidado e assistência à pessoa idosa.

@@ -13,11 +13,25 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('Painel') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.*')">
-                        {{ __('Usuários') }}
+                    <x-nav-link :href="route('idoso.index')" :active="request()->routeIs('idoso.*')">
+                        {{ __('Idosos') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('atividade.index')" :active="request()->routeIs('atividade.*')">
+                        {{ __('Atividades') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('frequencia.index')" :active="request()->routeIs('frequencia.*')">
+                        {{ __('Frequência') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('encaminhamento.index')" :active="request()->routeIs('encaminhamento.*')">
+                        {{ __('Encaminhamentos') }}
+                    </x-nav-link>
+                    @can('admin-access')
+                        <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.*')">
+                            {{ __('Equipe') }}
+                        </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
