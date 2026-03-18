@@ -26,30 +26,36 @@ class FrequenciaController extends Controller
     }
 
     /**
-     * Salva a frequência em lote.
+     * Salva a frequência em lote de forma otimizada.
      */
     public function store(Request $request)
     {
         $data = $request->input('data');
-        $presencas = $request->input('presencas', []); // idosos que estão presentes (marcados no checkbox)
-        $observacoes = $request->input('observacoes', []); // notas de intercorrências
+        $presencas = $request->input('presencas', []); 
+        $observacoes = $request->input('observacoes', []);
+        $now = now();
+        $authId = Auth::id();
 
-        // Buscamos todos os idosos
-        $todosIdosos = Idoso::all();
+        // Mapeamos os dados para uma única query de UPSERT
+        $upsertData = Idoso::all()->map(function ($idoso) use ($data, $presencas, $observacoes, $now, $authId) {
+            return [
+                'idoso_id' => $idoso->id,
+                'data' => $data,
+                'status' => isset($presencas[$idoso->id]) ? 'presente' : 'ausente',
+                'observacoes' => $observacoes[$idoso->id] ?? null,
+                'user_id' => $authId,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        })->toArray();
 
-        foreach ($todosIdosos as $idoso) {
-            $status = isset($presencas[$idoso->id]) ? 'presente' : 'ausente';
-            $obs = $observacoes[$idoso->id] ?? null;
-            
-            Frequencia::updateOrCreate(
-                ['idoso_id' => $idoso->id, 'data' => $data],
-                [
-                    'status' => $status,
-                    'observacoes' => $obs,
-                    'user_id' => Auth::id() // Auditoria: quem salvou/alterou
-                ]
-            );
-        }
+        // O Upsert utiliza a constraint unique(['idoso_id', 'data']) definida na migration
+        // e atualiza apenas os campos especificados se o registro já existir.
+        Frequencia::upsert(
+            $upsertData, 
+            ['idoso_id', 'data'], 
+            ['status', 'observacoes', 'user_id', 'updated_at']
+        );
 
         return redirect()->route('frequencia.index', ['data' => $data])
                          ->with('success', 'Frequência atualizada com sucesso!');

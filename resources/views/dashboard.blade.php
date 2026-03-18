@@ -54,11 +54,16 @@
                                 <span class="text-sm font-bold text-slate-700">{{ \Carbon\Carbon::parse($meuPonto->entrada)->format('H:i') }}</span>
                             </div>
                         @else
-                            <div class="bg-slate-50 px-6 py-3 rounded-lg border border-slate-200 text-slate-500 font-bold text-sm flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                                Jornada Finalizada
+                            <div class="flex flex-col items-end">
+                                <div class="bg-slate-50 px-6 py-3 rounded-lg border border-slate-200 text-slate-500 font-bold text-sm flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Jornada Finalizada
+                                </div>
+                                <a href="{{ route('ponto.historico', Auth::user()) }}" class="text-[10px] text-slate-400 font-bold uppercase mt-2 hover:text-emerald-600 transition-colors">
+                                    Ver meu histórico mensal
+                                </a>
                             </div>
                         @endif
                     </div>

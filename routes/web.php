@@ -7,30 +7,15 @@ use App\Http\Controllers\FrequenciaController;
 use App\Http\Controllers\IdosoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    $totalUsers = \App\Models\User::count();
-    $totalIdosos = \App\Models\Idoso::count();
-    return view('welcome', compact('totalUsers', 'totalIdosos'));
-})->name('dashboard');
+Route::get('/', [DashboardController::class, 'welcome'])->name('dashboard');
 
 // Rota padrão do Breeze para o Dashboard
-Route::get('/dashboard', function () {
-    $totalIdosos = \App\Models\Idoso::count();
-    
-    // Equipe presente hoje (deu entrada e ainda não deu saída)
-    $equipeHoje = \App\Models\PresencaEquipe::where('data', \Carbon\Carbon::today()->toDateString())
-        ->whereNull('saida')
-        ->count();
-
-    // Registro de ponto do usuário logado hoje
-    $meuPonto = \App\Models\PresencaEquipe::where('user_id', auth()->id())
-        ->where('data', \Carbon\Carbon::today()->toDateString())
-        ->first();
-
-    return view('dashboard', compact('totalIdosos', 'equipeHoje', 'meuPonto'));
-})->middleware(['auth', 'verified'])->name('home');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('home');
 
 // Agrupamento de rotas protegidas
 Route::middleware('auth')->group(function () {
@@ -68,6 +53,8 @@ Route::middleware('auth')->group(function () {
     // Rotas de Ponto (Equipe)
     Route::post('/ponto/entrada', [PresencaEquipeController::class, 'registrarEntrada'])->name('ponto.entrada');
     Route::post('/ponto/saida', [PresencaEquipeController::class, 'registrarSaida'])->name('ponto.saida');
+    Route::get('/ponto/{user}/historico', [PresencaEquipeController::class, 'relatorioPonto'])->name('ponto.historico');
+    Route::get('/ponto/{user}/exportar', [PresencaEquipeController::class, 'exportarRelatorioPonto'])->name('ponto.exportar');
 
     // Rotas de Equipe (Apenas Administradores)
     Route::middleware('can:admin-access')->group(function () {

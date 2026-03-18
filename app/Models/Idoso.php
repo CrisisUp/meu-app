@@ -53,4 +53,21 @@ class Idoso extends Model
     {
         return $this->belongsToMany(Atividade::class);
     }
+
+    /**
+     * Scope para aplicar filtros na listagem e exportação de idosos.
+     */
+    public function scopeFiltered($query, $search = null, $filtro = null)
+    {
+        return $query->when($search, function ($query, $search) {
+                return $query->where('nome', 'like', "%{$search}%")
+                             ->orWhere('cpf', 'like', "%{$search}%");
+            })
+            ->when($filtro == 'sem_cpf', function ($query) {
+                return $query->whereNull('cpf')->orWhere('cpf', '');
+            })
+            ->when($filtro == 'com_medicamento', function ($query) {
+                return $query->whereNotNull('medicamentos')->where('medicamentos', '!=', '');
+            });
+    }
 }

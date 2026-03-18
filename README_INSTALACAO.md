@@ -145,4 +145,30 @@ Como o sistema armazena dados sensíveis, siga esta rotina:
 * **Hora errada:** Verifique se o `APP_TIMEZONE=America/Sao_Paulo` está correto no arquivo `.env`.
 
 ---
+
+## 📸 Configurações de Upload de Fotos (IMPORTANTE)
+
+O sistema está configurado para aceitar fotos de até **10MB** no nível da aplicação (Laravel). No entanto, para que o servidor aceite esses arquivos (especialmente fotos de alta resolução de celulares modernos), você **deve** ajustar as configurações do seu PHP.
+
+### Como ajustar no Laragon ou Herd
+
+1. Localize o arquivo de configuração do PHP (`php.ini`).
+2. Procure as seguintes linhas e altere os valores para o recomendado abaixo:
+
+```ini
+; Tamanho máximo de um único arquivo de upload
+upload_max_filesize = 2MB
+
+; Tamanho máximo de todos os dados enviados via POST (deve ser maior ou igual ao de cima)
+post_max_size = 2MB
+
+; Limite de memória do PHP para processamento de imagens (recomendado)
+memory_limit = 256M
+```
+
+1. **Reinicie o servidor** (Laragon ou Herd) para que as mudanças entrem em vigor.
+
+> **Nota:** Se você não fizer esse ajuste, o sistema retornará o erro *"413 Content Too Large"* ou a foto simplesmente não será salva se exceder o limite padrão de 2MB do PHP.
+
+---
 &copy; 2026 — Documentação de Implantação Local Gestão CDI.
