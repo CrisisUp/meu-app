@@ -16,24 +16,22 @@ class UserController extends Controller
         return view('users.create');
     }
 
-    // Cadastrar no Banco de Dados o novo registro
     public function store(UserRequest $request)
     {
-    // 1. Validação (incluindo a senha agora)
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed', // Validando mínimo de 6 caracteres e confirmação
+            'password' => 'required|min:6|confirmed',
+            'role' => 'required|in:admin,funcionario',
         ]);
 
-        // 2. Criar o usuário com a senha do formulário
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password, // O Model User cuidará da criptografia automática!
+            'password' => $request->password,
+            'role' => $request->role,
         ]);
 
-        // 3. Redirecionar (Boa prática de UX)
         return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso!');
     }
 
@@ -65,12 +63,14 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|min:6|confirmed', // Senha opcional na edição
+            'role' => 'required|in:admin,funcionario',
         ]);
 
         // 2. Preparar os dados para atualizar
         $data = [
             'name' => $request->name,
             'email' => $request->email,
+            'role' => $request->role,
         ];
 
         // Se a senha foi preenchida, adiciona aos dados

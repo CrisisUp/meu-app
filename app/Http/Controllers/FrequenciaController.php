@@ -36,13 +36,15 @@ class FrequenciaController extends Controller
         $now = now();
         $authId = Auth::id();
 
-        // Mapeamos os dados para uma única query de UPSERT
-        $upsertData = Idoso::all()->map(function ($idoso) use ($data, $presencas, $observacoes, $now, $authId) {
+        // Buscamos apenas os IDs para otimizar memória
+        $idosoIds = Idoso::pluck('id');
+
+        $upsertData = $idosoIds->map(function ($id) use ($data, $presencas, $observacoes, $now, $authId) {
             return [
-                'idoso_id' => $idoso->id,
+                'idoso_id' => $id,
                 'data' => $data,
-                'status' => isset($presencas[$idoso->id]) ? 'presente' : 'ausente',
-                'observacoes' => $observacoes[$idoso->id] ?? null,
+                'status' => isset($presencas[$id]) ? 'presente' : 'ausente',
+                'observacoes' => $observacoes[$id] ?? null,
                 'user_id' => $authId,
                 'created_at' => $now,
                 'updated_at' => $now,
